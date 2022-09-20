@@ -37,16 +37,27 @@ public:
 	 
 	 std::string insert(int const& id, std::string const& name)
 	 {
-		 Binary_tree::Node* g = BT.add_new_node(n,id, name);
-		 Binary_tree::Node* find = BT.find(id, g);
+		 n = BT.add_new_node(n,id, name);
+		 Binary_tree::Node* find = BT.find(id, n);
+		 return std::to_string(id);
+		 /*
 		 if (find == nullptr)
 		 {
-			 return "unsuccessful";
+			 return "";//"unsuccessful";
 		 }
 		 else
 		 {
-			 return "success";
+			 return std::to_string(id); //"success";
 		 }
+		 */
+	 }
+	 int get_height()
+	 {
+		 return BT.getheight(n);
+	 }
+	 Binary_tree::Node* get_tree_root()
+	 {
+		 return n;
 	 }
 
 }tree;

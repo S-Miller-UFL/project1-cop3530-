@@ -18,10 +18,12 @@ public:
 	void change_node_data(Node*, unsigned int const&);
 	Node* find(std::string const&, Node*);
 	Node* get_tree_root();
-
+	int getheight(Node*);
+	void traverse(Node*);
 private:
 	int node_count = 0;
 	Node* tree_root = nullptr;
+	static int _level;
 };
 
 Binary_tree::Node* Binary_tree::create_new_node(unsigned int const& id, std::string const& name)
@@ -36,6 +38,7 @@ Binary_tree::Node* Binary_tree::create_new_node(unsigned int const& id, std::str
 	return node;
 }
 
+
 Binary_tree::Node* Binary_tree::add_new_node(Binary_tree::Node* root, unsigned int const& id, std::string const& name)
 {
 	if (root == nullptr)
@@ -44,13 +47,16 @@ Binary_tree::Node* Binary_tree::add_new_node(Binary_tree::Node* root, unsigned i
 	}
 	else if (id > root->id)
 	{
+		std::cout << "going to the right of: " << root->id << std::endl;
 		root->right = add_new_node(root->right,id,name);
 	}
 	else if (id < root->id)
 	{
+		std::cout << "going to the left of: " << root->id << std::endl;
 		root->left = add_new_node(root->left, id,name);
 	}
 	this->node_count = node_count + 1;
+	//std::cout << "added " << root->id << std::endl;
 	return root;
 }
 
@@ -78,7 +84,7 @@ int Binary_tree::get_node_data(Binary_tree::Node* target)
 
 Binary_tree::Node* Binary_tree::find(unsigned int const& id, Binary_tree::Node* node)
 {
-	std::cout <<"currently at: " << node->id << std::endl;
+	//std::cout <<"currently at: " << node->id << std::endl;
 	if (node->id == id)
 	{
 		return node;
@@ -127,3 +133,36 @@ void Binary_tree::change_node_data(Binary_tree::Node* target, unsigned int const
 	target->id = data;
 }
 
+int Binary_tree::getheight(Binary_tree::Node* node)
+{
+	int count = 0;
+	if (node == nullptr)
+	{
+		return count;
+	}
+	else
+	{
+		count = getheight(node->left) + count;
+		count = getheight(node->right) + count;
+		count++;
+	}
+	return count;
+}
+
+void Binary_tree::traverse(Node* n)
+{
+	if (n == nullptr)
+	{
+		return;
+	}
+	else
+	{
+		std::cout << "at node: " << n->id << std::endl;
+		std::cout << "left of " << n->id << ": ";
+		traverse(n->left);
+		std::cout << std::endl;
+		std::cout << "right of " << n->id << ": ";
+		traverse(n->right);
+		std::cout << std::endl;
+	}
+}
