@@ -14,7 +14,8 @@ int main()
 {
 	Binary_tree bst;
 	tree t;
-	Binary_tree::Node* n = bst.get_tree_root();
+	Binary_tree::Node* n = nullptr;
+	/*
 	n=bst.insert(n, 0, "adam smith");
 	n=bst.insert(n, 5, "adam smith");
 	n=bst.insert(n, 6, "adam smith");
@@ -22,21 +23,27 @@ int main()
 	n=bst.insert(n, 7, "adam smith");
 	n=bst.insert(n, 8, "adam smith");
 	
-	/*
-	n=bst.add_new_node(n, 10, "adam smith");
-	n=bst.add_new_node(n, 11, "adam smith");
-	n=bst.add_new_node(n, 12, "adam smith");
-	n=bst.add_new_node(n, 13, "adam smith");
-	n=bst.add_new_node(n, 14, "adam smith");
-	n=bst.add_new_node(n, 15, "adam smith");
-	n=bst.add_new_node(n, 19, "adam smith");
-	n=bst.add_new_node(n, 17, "adam smith");
+	
+	n=bst.insert(n, 10, "adam smith");
+	n=bst.insert(n, 11, "adam smith");
+	n=bst.insert(n, 12, "adam smith");
+	n=bst.insert(n, 13, "adam smith");
+	n=bst.insert(n, 14, "adam smith");
+	n=bst.insert(n, 15, "adam smith");
+	n=bst.insert(n, 19, "adam smith");
+	n=bst.insert(n, 17, "adam smith");
 	*/
+	
+	for (int i = 0; i < 133; i++)
+	{
+		n = bst.insert(n, (i + rand()), "adam smith");
+	}
 
 	//bst.traverse(t.get_tree_root());
 	//n = bst.check_balance(n);
-
+	//n = bst.get_tree_root();
 	bst.traverse(n);
+	std::cout << "number of nodes: " << bst.count(n) << std::endl;
 	return 0;
 }
 
