@@ -1,5 +1,6 @@
 #pragma once
 #include <queue>
+//got help from eric chen on 9/23/2022
 class Binary_tree
 {
 public:
@@ -24,10 +25,14 @@ public:
 	int get_balance_factor(Node*);
 	Node* rotate_left(Node*);
 	Node* rotate_right(Node*);
-	int count(Node*);
+	int count();
 	std::queue<Binary_tree::Node*> count_helper(Node*, std::queue<Binary_tree::Node*>);
+	void remove_node(unsigned int const&);
+	Node* remove(Node*, bool);
+	void main_insert(unsigned int const&, std::string const&);
 private:
 	int node_count = 0;
+	//create a constructor for tree_root
 	Node* tree_root = nullptr;
 	static int _level;
 };
@@ -82,6 +87,7 @@ Binary_tree::Node* Binary_tree::insert(Binary_tree::Node* root, unsigned int con
 	* 
 	*/
 	//based off code from lecture slides (avl trees)
+	
 	if (root->balance_factor == -2)
 	{
 		if (root->right->balance_factor == 1)
@@ -110,6 +116,7 @@ Binary_tree::Node* Binary_tree::insert(Binary_tree::Node* root, unsigned int con
 			root = rotate_right(root);
 		}
 	}
+	
 	root->balance_factor = getheight(root->left) - getheight(root->right);
 
 	//root = check_balance(root);
@@ -259,9 +266,9 @@ Binary_tree::Node* Binary_tree::rotate_right(Node* root)
 	return N;
 }
 
-int Binary_tree::count(Binary_tree::Node* n)
+int Binary_tree::count()
 {
-	std::queue<Binary_tree::Node*> q = count_helper(n, q);
+	std::queue<Binary_tree::Node*> q = count_helper(this->tree_root, q);
 	return q.size();
 }
 
@@ -278,4 +285,32 @@ std::queue<Binary_tree::Node*> Binary_tree::count_helper(Node* root, std::queue<
 		q = count_helper(root->right, q);
 	}
 	return q;
+}
+
+void Binary_tree::remove_node(unsigned int const& id)
+{
+
+}
+
+//pass in the node BEFORE the one to be deleted
+//left = which side is it on
+Binary_tree::Node* Binary_tree::remove(Node* root, bool left)
+{
+	//if the node to be deleted is the left node
+	if (left)
+	{
+		root->left = root->left->left;
+	}
+	if (!left)
+	{
+		root->right = root->right->left;
+	}
+	
+	return root;
+}
+
+void Binary_tree::main_insert(unsigned int const& id, std::string const& name)
+{
+	this->tree_root = insert(this->tree_root, id, name);
+
 }

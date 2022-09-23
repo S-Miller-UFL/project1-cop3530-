@@ -37,7 +37,7 @@ public:
 	 
 	 std::string insert(int const& id, std::string const& name)
 	 {
-		n = BT.insert(n,id, name);
+		BT.main_insert(id, name);
 		 //Binary_tree::Node* find = BT.find(id, n);
 		 return std::to_string(id);
 		 /*
