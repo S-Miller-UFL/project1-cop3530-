@@ -37,8 +37,8 @@ public:
 	 
 	 std::string insert(int const& id, std::string const& name)
 	 {
-		 n = BT.add_new_node(n,id, name);
-		 Binary_tree::Node* find = BT.find(id, n);
+		n = BT.insert(n,id, name);
+		 //Binary_tree::Node* find = BT.find(id, n);
 		 return std::to_string(id);
 		 /*
 		 if (find == nullptr)
@@ -55,9 +55,17 @@ public:
 	 {
 		 return BT.getheight(n);
 	 }
+	 void isbalanced(Binary_tree::Node* foo)
+	 {
+		 //return BT.balanced(foo);
+	 }
 	 Binary_tree::Node* get_tree_root()
 	 {
-		 return n;
+		 return BT.get_tree_root();
+	 }
+	 void traverse(Binary_tree::Node* foo)
+	 {
+		 BT.traverse(foo);
 	 }
 
 }tree;
