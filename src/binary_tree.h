@@ -28,6 +28,7 @@ public:
 	int get_id(Node*);
 	std::string get_name(Node*);
 	Node* find(unsigned int const&, Node*);
+	Node* find_parent(unsigned int const& ,Node*);
 	void find_helper(unsigned int const&);
 	void find_helper(std::string const&);
 	void change_node_data(Node*, unsigned int const&);
@@ -35,14 +36,16 @@ public:
 	Node* get_tree_root();
 	int getheight(Node*);
 	void traverse(Node*);
-	//Binary_tree::Node* check_balance(Node*);
+	void traverse_whole_tree();
+	int check_balance(Node*);
 	int get_balance_factor(Node*);
+	Node* balance(Node*);
 	Node* rotate_left(Node*);
 	Node* rotate_right(Node*);
 	int count();
 	std::queue<Binary_tree::Node*> count_helper(Node*, std::queue<Binary_tree::Node*>);
 	void remove_node(unsigned int const&);
-	Node* remove(Node*, bool);
+	Node* remove(Node*, unsigned int const&);
 	void main_insert(unsigned int const&, std::string const&);
 	void print_preorder_helper();
 	void print_postorder_helper();
@@ -77,18 +80,9 @@ Binary_tree::Node* Binary_tree::create_new_node(unsigned int const& id, std::str
 
 Binary_tree::Node* Binary_tree::insert(Binary_tree::Node* root, unsigned int const& id, std::string const& name)
 {
-	if (root != nullptr)
-	{
-		//std::cout << "at node: " << root->id << std::endl;
-	}
 	if (root == nullptr)
 	{
 		root = create_new_node(id, name);
-	}
-	//temporary
-	if (root->id == id)
-	{
-		//std::cout << "duplicate detected: " << root->id << " already exists!" << std::endl;
 	}
 	else if (id > root->id)
 	{
@@ -100,57 +94,8 @@ Binary_tree::Node* Binary_tree::insert(Binary_tree::Node* root, unsigned int con
 		//std::cout << "going to the left of: " << root->id << std::endl;
 		root->left = insert(root->left, id,name);
 	}
-	root->balance_factor = getheight(root->left) - getheight(root->right);
-	/*
-	* if tree is right heavy //balance_factor == -2
-	*	if trees right subtree is left heavy //balance_factor == +1
-	*		perform right left rotation
-	*	else
-	*		perform left rotation
-	* else if tree is left heavy //balance_factor == +2
-	*	if trees left subtree is right heavy //balance_factor == -1
-	*		perform left right rotation
-	*	else
-	*		perform right rotation
-	* 
-	*/
-	//based off code from lecture slides (avl trees)
-	
-	if (root->balance_factor == -2)
-	{
-		if (root->right->balance_factor == 1)
-		{
-			//std::cout << "performing right left rotation: " << std::endl;
-			root->right = rotate_right(root->right);
-			root = rotate_left(root);
-		}
-		else
-		{
-			//std::cout << "performing left rotation: " << std::endl;
-			root = rotate_left(root);
-		}
-	}
-	else if (root->balance_factor == 2)
-	{
-		if (root->left->balance_factor == -1)
-		{
-			//std::cout << "performing left right rotation: " << std::endl;
-			root->left = rotate_left(root->left);
-			root = rotate_right(root);
-		}
-		else
-		{
-			//std::cout << "performing right rotation: " << std::endl;
-			root = rotate_right(root);
-		}
-	}
-	
-	root->balance_factor = getheight(root->left) - getheight(root->right);
-
-	//root = check_balance(root);
-	//std::cout << "added " << root->id << std::endl;
-	//need to perform rotation correction here
-	//root->balance_factor = getheight(root->left) - getheight(root->right);
+	root->balance_factor = check_balance(root);
+	root = balance(root);
 	return root;
 }
 
@@ -185,6 +130,30 @@ Binary_tree::Node* Binary_tree::find(unsigned int const& id, Binary_tree::Node* 
 		node = find(id, node->right);
 	}
 	return node;
+}
+Binary_tree::Node* Binary_tree::find_parent(unsigned int const& id, Node* parent)
+{
+	if (parent == nullptr)
+	{
+		return parent;
+	}
+	if (parent->left->id == id)
+	{
+		return parent;
+	}
+	if (parent->right->id == id)
+	{
+		return parent;
+	}
+	if (parent->id > id)
+	{
+		parent = find_parent(id, parent->left);
+	}
+	if (parent->id < id)
+	{
+		parent = find_parent(id, parent->right);
+	}
+	return parent;
 }
 void Binary_tree::find_helper(unsigned int const& id)
 {
@@ -270,33 +239,61 @@ void Binary_tree::traverse(Node* n)
 	}
 }
 
-//well leave this here for now, will probably delete later.
-/*
-Binary_tree::Node* Binary_tree::check_balance(Node* tree_root)
+void Binary_tree::traverse_whole_tree()
 {
-	int left = 0;
-	int right = 0;
-	left = getheight(tree_root->left);
-	right = getheight(tree_root->right);
-	//std::cout << "balance factor: " << left - right << std::endl;
-	if (tree_root->balance_factor > 1 || tree_root->balance_factor < -1)
-	{
-		std::cout << tree_root->id << " is unbalanced!" << std::endl;
-		//tree_root = rotate(tree_root, tree_root->balance_factor);
-		//return false;
-	}
-	else
-	{
-		std::cout << tree_root->id << " is balanced!" << std::endl;
-		//return true;
-	}
-	return tree_root;
+	traverse(this->tree_root);
 }
-*/
+
+//well leave this here for now, will probably delete later.
+
+int Binary_tree::check_balance(Node* tree_root)
+{
+	return getheight(tree_root->left) - getheight(tree_root->right);
+}
+
 
 int Binary_tree::get_balance_factor(Node* root)
 {
 	return root->balance_factor;
+}
+
+Binary_tree::Node* Binary_tree::balance(Node* root)
+{
+	//based off code from lecture slides (avl trees)
+	if (root->balance_factor == -2)
+	{
+		if (root->right->balance_factor == 1)
+		{
+			//std::cout << "performing right left rotation: " << std::endl;
+			root->right = rotate_right(root->right);
+			root = rotate_left(root);
+		}
+		else
+		{
+			//std::cout << "performing left rotation: " << std::endl;
+			root = rotate_left(root);
+		}
+		root->left->balance_factor = check_balance(root->left);
+		root->right->balance_factor = check_balance(root->right);
+	}
+	else if (root->balance_factor == 2)
+	{
+		if (root->left->balance_factor == -1)
+		{
+			//std::cout << "performing left right rotation: " << std::endl;
+			root->left = rotate_left(root->left);
+			root = rotate_right(root);
+		}
+		else
+		{
+			//std::cout << "performing right rotation: " << std::endl;
+			root = rotate_right(root);
+		}
+		root->left->balance_factor = check_balance(root->left);
+		root->right->balance_factor = check_balance(root->right);
+	}
+	root->balance_factor = check_balance(root);
+	return root;
 }
 
 //based off of the code in the lecture slides (AVL trees)
@@ -308,6 +305,7 @@ Binary_tree::Node* Binary_tree::rotate_left(Node* root)
 	N = root->right;
 	root->right = node;
 	N->left = root;
+	//N->balance_factor = check_balance(N);
 	return N;
 }
 //based off of the code in the lecture slides (AVL trees)
@@ -319,6 +317,7 @@ Binary_tree::Node* Binary_tree::rotate_right(Node* root)
 	N = root->left;
 	root->left = node;
 	N->right = root;
+	//N->balance_factor = check_balance(N);
 	return N;
 }
 //only here for debugging
@@ -345,21 +344,85 @@ std::queue<Binary_tree::Node*> Binary_tree::count_helper(Node* root, std::queue<
 
 void Binary_tree::remove_node(unsigned int const& id)
 {
-
+	//Binary_tree::Node* N = find(id, this->tree_root);
+	this->tree_root = remove(this->tree_root, id);
+	this->node_count = this->node_count - 1;
 }
 
-//pass in the node BEFORE the one to be deleted
-//left = which side is it on
-Binary_tree::Node* Binary_tree::remove(Node* root, bool left)
+
+//method 1:
+//pass in the PARENT of the node to be deleted
+/*
+* if the root has no grandchildren
+*	set root's child equal to nullptr (or alternatively, delete it)
+* if the root has one grandchild
+*	point the root
+* 
+*/
+//method 2:
+//pass in the node to be deleted
+/*
+*if the node to be deleted has no children
+*	set the node equal to null ptr
+* if the node to be deleted has only one child
+*	set the node equal to the child
+* if the node to be deleted has two children
+*	find the inorder successor
+*	set the node equal to the IOS
+*	
+*/
+//find the IOS
+/*
+* to find the IOS, we need to find the leftmost node of the right subtree
+* to find the leftmost node, we need to find the node that is the most right-heavy
+* this requires that our balances for each node be correct
+*/
+Binary_tree::Node* Binary_tree::remove(Node* root, unsigned int const& id)
 {
-	//if the node to be deleted is the left node
-	if (left)
+	//pass in tree root
+	//return tree root but with node removed
+	/*
+	* cant get find involved, wont return tree root.
+	* this function will have to find the tree root
+	* traverse the tree
+	* if the node is found, remove it
+	* return tree root;
+	*/
+	if (root == nullptr)
 	{
-		root->left = root->left->left;
+		return root;
 	}
-	if (!left)
+	//removing leaf node works fine
+	//removing node with two children
+	//removing node with one child
+	if (root->id == id)
 	{
-		root->right = root->right->left;
+		if (root->left == nullptr && root->right == nullptr)
+		{
+			root = nullptr;
+		}
+		else if (root->left == nullptr && root->right != nullptr)
+		{
+			//set node equal to right node
+			root = root->right;
+		}
+		else if (root->left != nullptr && root->right == nullptr)
+		{
+			//set node equal to left node
+			root = root->left;
+		}
+		else if (root->left != nullptr && root->right != nullptr)
+		{
+			
+		}
+	}
+	else if (root->id > id)
+	{
+		root->left = remove(root->left,id);
+	}
+	else if (root->id < id)
+	{
+		root->right = remove( root->right,id);
 	}
 	
 	return root;
