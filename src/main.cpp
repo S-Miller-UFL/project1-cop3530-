@@ -10,6 +10,7 @@
 /*
 * in addition, i need to see if theres a way i can visualize it
 */
+std::string random_name();
 int main()
 {
 	Binary_tree bst;
@@ -42,16 +43,51 @@ int main()
 	n=bst.insert(n, 17, "adam smith");
 	*/
 	//use helper functions to help get the root
-	for (int i = 0; i < 5000; i++)
+	bst.main_insert(100, "evan johnson");
+	//std::cout << random_name() << std::endl;
+	for (int i = 0; i < 10; i++)
 	{
-		bst.main_insert(i, "adam smith");
+		//std::cout << (i + rand()) / 100 << std::endl;
+		bst.main_insert((i), random_name());
 	}
-	n = bst.get_tree_root();
+	//n = bst.get_tree_root();
 	//bst.traverse(t.get_tree_root());
 	//n = bst.check_balance(n);
 	//n = bst.get_tree_root();
-	bst.traverse(n);
+	//bst.traverse(n);
 	std::cout << "number of nodes: " << bst.count() << std::endl;
+
+	//bst.find_helper(366);
+	//bst.find_helper("evan johnson");
+	//bst.find_helper("adam smith");
+	std::cout << "preorder: " << std::endl;
+	bst.print_preorder_helper();
+	std::cout << std::endl;
+	std::cout << std::endl;
+	std::cout << "inorder: " << std::endl;
+	bst.print_inorder_helper();
+	std::cout << std::endl;
+	std::cout << std::endl;
+	std::cout << "postorder: " << std::endl;
+	bst.print_postorder_helper();
+	std::cout << std::endl;
+	std::cout << std::endl;
 	return 0;
+}
+//for testing only, delete when submitting project
+std::string random_name()
+{
+	std::vector<char> alphabet = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
+	std::string name = "";
+	for (int i = 0; i < 5; i++)
+	{
+		name = name + alphabet.at(rand() %(alphabet.size()-1));
+	}
+	name = name + " ";
+	for (int i = 0; i < 5; i++)
+	{
+		name = name + alphabet.at(rand() % (alphabet.size()-1));
+	}
+	return name;
 }
 

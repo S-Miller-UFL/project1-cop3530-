@@ -8,7 +8,7 @@ private:
 	Binary_tree BT;
 	Binary_tree::Node* n = BT.get_tree_root();
 public:
-
+	/*
 	 int find(std::string const& name)
 	{
 		Binary_tree::Node* find = BT.find(name, n);
@@ -21,7 +21,7 @@ public:
 			return find->id;
 		}
 	}
-	 
+	 */
 	 std::string find(unsigned int const& id)
 	 {
 		 Binary_tree::Node* find = BT.find(id, n);
