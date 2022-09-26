@@ -1,6 +1,7 @@
 #pragma once
 #include <queue>
 //got help from eric chen on 9/23/2022
+//got help from liv on 9/26/2022
 /*
 * insert NAME ID
 * remove ID
@@ -413,6 +414,26 @@ Binary_tree::Node* Binary_tree::remove(Node* root, unsigned int const& id)
 		}
 		else if (root->left != nullptr && root->right != nullptr)
 		{
+			//do some complicated shit here involving in order successor
+			/*
+			* go into the right subtree and get the node with the smallest value(M)
+			* make a temp node and set the temp node value equal to M's value(temp)
+			* set smallest value node equal to its right node
+			* delete M
+			* set roots value equal to temp
+			*/
+			std::queue<Binary_tree::Node*> q = get_inorder(root,q);
+			Binary_tree::Node* M = nullptr;
+			int temp = root->right->id;
+			while (!q.empty())
+			{
+				if (q.front()->id < temp)
+				{
+					temp = q.front()->id;
+					M = q.front();
+				}
+				q.pop();
+			}
 			
 		}
 	}

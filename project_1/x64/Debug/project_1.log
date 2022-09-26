@@ -1,3 +1,4 @@
 ﻿  main.cpp
 C:\Users\steve\source\cop3530\project_1\src\binary_tree.h(327,17): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+  LINK : C:\Users\steve\source\cop3530\project_1\x64\Debug\project_1.exe not found or not built by the last incremental link; performing full link
   project_1.vcxproj -> C:\Users\steve\source\cop3530\project_1\x64\Debug\project_1.exe
