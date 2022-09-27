@@ -32,8 +32,15 @@ int main()
 		bst.main_insert((i), random_name());
 	}
 	bst.traverse_whole_tree();
-	bst.remove_node(0);
+	bst.remove_node(3);
 	bst.traverse_whole_tree();
+	bst.remove_node(7);
+	bst.traverse_whole_tree();
+	bst.remove_node(8);
+	bst.traverse_whole_tree();
+	bst.remove_node(9);
+	bst.traverse_whole_tree();
+
 	return 0;
 }
 //for testing only, delete when submitting project

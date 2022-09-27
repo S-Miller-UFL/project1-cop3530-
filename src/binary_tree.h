@@ -55,6 +55,7 @@ public:
 	std::queue< Binary_tree::Node*> get_postorder(Binary_tree::Node* , std::queue< Binary_tree::Node*> );
 	std::queue< Binary_tree::Node*> get_inorder(Binary_tree::Node* , std::queue< Binary_tree::Node*> );
 	void print_queue(std::queue< Binary_tree::Node*>);
+	void remove_N(int const&);
 
 
 private:
@@ -422,18 +423,29 @@ Binary_tree::Node* Binary_tree::remove(Node* root, unsigned int const& id)
 			* delete M
 			* set roots value equal to temp
 			*/
-			std::queue<Binary_tree::Node*> q = get_inorder(root,q);
+			std::queue<Binary_tree::Node*> q = get_inorder(root->right,q);
 			Binary_tree::Node* M = nullptr;
 			int temp = root->right->id;
-			while (!q.empty())
+			//get the smallest value
+			while(!q.empty())
 			{
-				if (q.front()->id < temp)
+				if (q.front()->id <= temp)
 				{
 					temp = q.front()->id;
 					M = q.front();
 				}
 				q.pop();
 			}
+			//get value of ios
+			//its probably green squiggled, i think this is because it assumes q can be empty,
+			//which would give us a null pointer. But q can only be empty if the right subtree is empty
+			//and if the right subtree is empty, this function would not even be called
+			//therefore, you can ignore this squiggly.
+			temp = M->id;
+			//delete the ios by passing in the right subtree
+			root->right=remove(root->right, temp);
+			//set the root
+			root->id = temp;
 			
 		}
 	}
@@ -545,6 +557,15 @@ void Binary_tree::print_queue(std::queue<Binary_tree::Node*> q)
 	while (!q.empty())
 	{
 		std::cout << q.front()->name << " ,";
+		q.pop();
+	}
+}
+
+void Binary_tree::remove_N(int const& N)
+{
+	std::queue<Binary_tree::Node*> q = get_inorder(this->tree_root,q);
+	for (int i = 0; i < N; i++)
+	{
 		q.pop();
 	}
 }
