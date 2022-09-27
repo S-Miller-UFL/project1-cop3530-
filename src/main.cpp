@@ -6,41 +6,50 @@
 	1. You will have to comment main() when unit testing your code because catch uses its own main().
 	2. You will submit this main.cpp file and any header files you have on Gradescope. 
 */
-//i have no idea if this binary tree actually works and arranges properly
-/*
-* in addition, i need to see if theres a way i can visualize it
-*/
+
 std::string random_name();
+//get a line to print out from the users input
+//make one for file streams too
 int main()
 {
-	Binary_tree bst;
-	tree t;
-	Binary_tree::Node* n = nullptr;
-	//use getline
+	std::string result;
+	std::cin >> result;
+	std::cout << result << std::endl;
+	//insert remove find etc
+	//look into using string.compare instead of ==
+	//get substring of result
+	result.substr();
+	//get the substring of result up until the first space character
+	//if ()
+	//{
+		//check for appropriate parameters
+		//insert nameid: name and then id seperated by space
+		//
+	//}
 	/*
-	* use substring to see what command they wanna do, look at the data on the same line
-	* based on command and data, perform the command.
+	* //use getline
+	*use substring to see what command they wanna do, look at the data on the same line
+	* based on commandand data, perform the command.
 	* example: insert gatorid name
 	* if "insert
-	*	call insert(gatorid,name)
-	*/
-
+	* call insert(gatorid, name)
+	*
+	 */
+	
+	Binary_tree bst;
 	//use helper functions to help get the root
 	for (int i = 0; i < 10; i++)
 	{
 		//std::cout << (i + rand()) / 100 << std::endl;
 		bst.main_insert((i), random_name());
 	}
-	bst.traverse_whole_tree();
-	bst.remove_node(3);
-	bst.traverse_whole_tree();
-	bst.remove_node(7);
-	bst.traverse_whole_tree();
-	bst.remove_node(8);
-	bst.traverse_whole_tree();
-	bst.remove_node(9);
-	bst.traverse_whole_tree();
 
+	bst.traverse_whole_tree();
+	bst.print_inorder_helper();
+	bst.remove_N(3);
+	bst.traverse_whole_tree();
+	bst.print_level_count();
+	
 	return 0;
 }
 //for testing only, delete when submitting project

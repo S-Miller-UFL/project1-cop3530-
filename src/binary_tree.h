@@ -2,6 +2,7 @@
 #include <queue>
 //got help from eric chen on 9/23/2022
 //got help from liv on 9/26/2022
+//got help from blake shaffer on 9/27/2022
 /*
 * insert NAME ID
 * remove ID
@@ -24,40 +25,44 @@ public:
 		Node* left = nullptr;
 		Node* right = nullptr;
 	};
+	//functions that help with inserting nodes
 	Node* create_new_node(unsigned int const&, std::string const&);
+	void main_insert(unsigned int const&, std::string const&);
 	Node* insert(Node*,unsigned int const&, std::string const&);
-	int get_id(Node*);
-	std::string get_name(Node*);
-	Node* find(unsigned int const&, Node*);
-	Node* find_parent(unsigned int const& ,Node*);
-	void find_helper(unsigned int const&);
-	void find_helper(std::string const&);
-	void change_node_data(Node*, unsigned int const&);
-	std::queue<Node*> find(std::queue<Binary_tree::Node*>,std::string const&, Node*);
-	Node* get_tree_root();
-	int getheight(Node*);
-	void traverse(Node*);
-	void traverse_whole_tree();
-	int check_balance(Node*);
-	int get_balance_factor(Node*);
-	Node* balance(Node*);
-	Node* rotate_left(Node*);
-	Node* rotate_right(Node*);
-	int count();
-	std::queue<Binary_tree::Node*> count_helper(Node*, std::queue<Binary_tree::Node*>);
+	//functions that help with removing nodes
 	void remove_node(unsigned int const&);
 	Node* remove(Node*, unsigned int const&);
-	void main_insert(unsigned int const&, std::string const&);
+	void remove_N(int const&);
+	//functions that help with finding nodes
+	Node* find(unsigned int const&, Node*);
+	Node* find_parent(unsigned int const&, Node*);
+	void find_helper(unsigned int const&);
+	void find_helper(std::string const&);
+	std::queue<Node*> find(std::queue<Binary_tree::Node*>, std::string const&, Node*);
+	//functions that help with printing
 	void print_preorder_helper();
 	void print_postorder_helper();
 	void print_inorder_helper();
-	std::queue< Binary_tree::Node*> get_preorder(Binary_tree::Node* , std::queue< Binary_tree::Node*> );
-	std::queue< Binary_tree::Node*> get_postorder(Binary_tree::Node* , std::queue< Binary_tree::Node*> );
-	std::queue< Binary_tree::Node*> get_inorder(Binary_tree::Node* , std::queue< Binary_tree::Node*> );
+	void print_level_count();
 	void print_queue(std::queue< Binary_tree::Node*>);
-	void remove_N(int const&);
-
-
+	//getters
+	int get_id(Node*);
+	std::string get_name(Node*);
+	Node* get_tree_root();
+	int getheight(Node*);
+	int check_balance(Node*);
+	int get_balance_factor(Node*);
+	std::queue< Binary_tree::Node*> get_preorder(Binary_tree::Node*, std::queue< Binary_tree::Node*>);
+	std::queue< Binary_tree::Node*> get_postorder(Binary_tree::Node*, std::queue< Binary_tree::Node*>);
+	std::queue< Binary_tree::Node*> get_inorder(Binary_tree::Node*, std::queue< Binary_tree::Node*>);
+	//traversers
+	void traverse(Node*);
+	void traverse_whole_tree();
+	//mutators
+	Node* balance(Node*);
+	Node* rotate_left(Node*);
+	Node* rotate_right(Node*);
+	void change_node_data(Node*, unsigned int const&);
 private:
 	int node_count = 0;
 	//create a constructor for tree_root
@@ -247,7 +252,6 @@ void Binary_tree::traverse_whole_tree()
 }
 
 //well leave this here for now, will probably delete later.
-
 int Binary_tree::check_balance(Node* tree_root)
 {
 	return getheight(tree_root->left) - getheight(tree_root->right);
@@ -322,6 +326,7 @@ Binary_tree::Node* Binary_tree::rotate_right(Node* root)
 	//N->balance_factor = check_balance(N);
 	return N;
 }
+/*
 //only here for debugging
 int Binary_tree::count()
 {
@@ -343,6 +348,7 @@ std::queue<Binary_tree::Node*> Binary_tree::count_helper(Node* root, std::queue<
 	}
 	return q;
 }
+*/
 
 void Binary_tree::remove_node(unsigned int const& id)
 {
@@ -484,6 +490,10 @@ void Binary_tree::print_inorder_helper()
 	std::queue< Binary_tree::Node*> q;
 	print_queue(get_inorder(this->tree_root, q));
 }
+void Binary_tree::print_level_count()
+{
+	std::cout << getheight(this->tree_root) << std::endl;
+}
 //our goal is a preorder
 /*
 * go to a node
@@ -556,11 +566,15 @@ void Binary_tree::print_queue(std::queue<Binary_tree::Node*> q)
 {
 	while (!q.empty())
 	{
-		std::cout << q.front()->name << " ,";
+		//temporary, delete when submitting.
+		std::cout << q.front()->id << " ,";
+		//std::cout << q.front()->name << " ,";
 		q.pop();
 	}
 }
 
+//getting the entire tree but inorder traversal
+//removing nth item from that inorder traversal
 void Binary_tree::remove_N(int const& N)
 {
 	std::queue<Binary_tree::Node*> q = get_inorder(this->tree_root,q);
@@ -568,4 +582,8 @@ void Binary_tree::remove_N(int const& N)
 	{
 		q.pop();
 	}
+	this->tree_root = remove(this->tree_root,q.front()->id);
+	//this->tree_root= remove_N(this->tree_root, q.front());
 }
+
+
