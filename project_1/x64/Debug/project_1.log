@@ -1,3 +1,7 @@
 ﻿  main.cpp
-C:\Users\steve\source\cop3530\project_1\src\binary_tree.h(438,23): warning C4018: '<=': signed/unsigned mismatch
+C:\Users\steve\source\cop3530\project_1\src\binary_tree.h(402,23): warning C4018: '<=': signed/unsigned mismatch
+C:\Users\steve\source\cop3530\project_1\src\main.cpp(25,30): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\steve\source\cop3530\project_1\src\main.cpp(28,29): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\steve\source\cop3530\project_1\src\main.cpp(36,29): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\steve\source\cop3530\project_1\src\main.cpp(38,25): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
   project_1.vcxproj -> C:\Users\steve\source\cop3530\project_1\x64\Debug\project_1.exe
