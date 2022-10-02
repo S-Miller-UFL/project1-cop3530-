@@ -26,13 +26,13 @@ public:
 	Binary_tree();
 	~Binary_tree();
 	//functions that help with inserting nodes
-	void main_insert(unsigned int const&, std::string const&);
+	void insert(unsigned int const&, std::string const&);
 	//functions that help with removing nodes
-	void remove_node(unsigned int const&);
+	void remove(unsigned int const&);
 	void remove_N(int const&);
 	//functions that help with finding nodes
-	void find_helper(unsigned int const&);
-	void find_helper(std::string const&);
+	void search(unsigned int const&);
+	void search(std::string const&);
 	//functions that help with printing
 	void print_preorder_helper();
 	void print_postorder_helper();
@@ -40,18 +40,19 @@ public:
 	void print_level_count();
 	//traversers
 	void traverse_whole_tree();
+	std::vector<int> inorder();
 
 private:
 	//functions that help with inserting nodes
 	Node* create_new_node(unsigned int const&, std::string const&);
-	Node* insert(Node*, unsigned int const&, std::string const&);
+	Node* priv_insert(Node*, unsigned int const&, std::string const&);
 	//functions that help with removing nodes
-	Node* remove(Node*, unsigned int const&);
+	Node* priv_remove(Node*, unsigned int const&);
 	//functions that help with printing
 	void print_queue(std::queue< Binary_tree::Node*>);
 	//functions that help with finding nodes
-	Node* find(unsigned int const&, Node*);
-	std::queue<Node*> find(std::queue<Binary_tree::Node*>, std::string const&, Node*);
+	Node* priv_search(unsigned int const&, Node*);
+	std::queue<Node*> priv_search(std::queue<Binary_tree::Node*>, std::string const&, Node*);
 	Node* find_parent(unsigned int const&, Node*);
 	//getters
 	int get_id(Node*);
@@ -60,9 +61,9 @@ private:
 	int getheight(Node*);
 	int check_balance(Node*);
 	int get_balance_factor(Node*);
-	std::queue< Binary_tree::Node*> get_preorder(Binary_tree::Node*, std::queue< Binary_tree::Node*>);
-	std::queue< Binary_tree::Node*> get_postorder(Binary_tree::Node*, std::queue< Binary_tree::Node*>);
-	std::queue< Binary_tree::Node*> get_inorder(Binary_tree::Node*, std::queue< Binary_tree::Node*>);
+	std::queue< Binary_tree::Node*> get_preorder(Binary_tree::Node*, std::queue< Binary_tree::Node*>&);
+	std::queue< Binary_tree::Node*> get_postorder(Binary_tree::Node*, std::queue< Binary_tree::Node*>&);
+	std::queue< Binary_tree::Node*> get_inorder(Binary_tree::Node*, std::queue< Binary_tree::Node*>&);
 	//traversers
 	void traverse(Node*);
 	//mutators
@@ -95,7 +96,7 @@ Binary_tree::Node* Binary_tree::create_new_node(unsigned int const& id, std::str
 }
 
 
-Binary_tree::Node* Binary_tree::insert(Binary_tree::Node* root, unsigned int const& id, std::string const& name)
+Binary_tree::Node* Binary_tree::priv_insert(Binary_tree::Node* root, unsigned int const& id, std::string const& name)
 {
 	if (root == nullptr)
 	{
@@ -104,12 +105,12 @@ Binary_tree::Node* Binary_tree::insert(Binary_tree::Node* root, unsigned int con
 	else if (id > root->id)
 	{
 		//std::cout << "going to the right of: " << root->id << std::endl;
-		root->right = insert(root->right,id,name);
+		root->right = priv_insert(root->right,id,name);
 	}
 	else if (id < root->id)
 	{
 		//std::cout << "going to the left of: " << root->id << std::endl;
-		root->left = insert(root->left, id,name);
+		root->left = priv_insert(root->left, id,name);
 	}
 	root->balance_factor = check_balance(root);
 	root = balance(root);
@@ -127,24 +128,24 @@ std::string Binary_tree::get_name(Node* root)
 	return root->name;
 }
 
-Binary_tree::Node* Binary_tree::find(unsigned int const& id, Binary_tree::Node* node)
+Binary_tree::Node* Binary_tree::priv_search(unsigned int const& id, Binary_tree::Node* node)
 {
 	//std::cout <<"currently at: " << node->id << std::endl;
 	if (node == nullptr)
 	{
 		return node;
 	}
-	if (node->id == id)
+	else if (node->id == id)
 	{
 		return node;
 	}
-	if (node->id > id)
+	else if (node->id > id)
 	{
-		node = find(id, node->left);
+		node = priv_search(id, node->left);
 	}
-	if (node->id < id)
+	else if (node->id < id)
 	{
-		node = find(id, node->right);
+		node = priv_search(id, node->right);
 	}
 	return node;
 }
@@ -172,21 +173,35 @@ Binary_tree::Node* Binary_tree::find_parent(unsigned int const& id, Node* parent
 	}
 	return parent;
 }
-void Binary_tree::find_helper(unsigned int const& id)
+void Binary_tree::search(unsigned int const& id)
 {
-	std::cout << get_name(find(id, this->tree_root)) << std::endl;
-}
-void Binary_tree::find_helper(std::string const& name)
-{
-	std::queue<Binary_tree::Node*> q;
-	q = find(q, name, this->tree_root);
-	while (!q.empty())
+	if (priv_search(id, this->tree_root) == nullptr)
 	{
-		std::cout << get_id(q.front()) << std::endl;
-		q.pop();
+		std::cout << "unsuccessful" << std::endl;
+	}
+	else
+	{
+		std::cout << get_name(priv_search(id, this->tree_root)) << std::endl;
 	}
 }
-std::queue<Binary_tree::Node*> Binary_tree::find(std::queue<Binary_tree::Node*> q,std::string const& name, Binary_tree::Node* node)
+void Binary_tree::search(std::string const& name)
+{
+	std::queue<Binary_tree::Node*> q;
+	q = priv_search(q, name, this->tree_root);
+	if (q.empty())
+	{
+		std::cout << "unsuccessful" << std::endl;
+	}
+	else
+	{
+		while (!q.empty())
+		{
+			std::cout << get_id(q.front()) << std::endl;
+			q.pop();
+		}
+	}
+}
+std::queue<Binary_tree::Node*> Binary_tree::priv_search(std::queue<Binary_tree::Node*> q,std::string const& name, Binary_tree::Node* node)
 {
 	if (node == nullptr)
 	{
@@ -196,17 +211,17 @@ std::queue<Binary_tree::Node*> Binary_tree::find(std::queue<Binary_tree::Node*> 
 	{
 		//im 99.9999999999999% sure this is preorder but you never know
 		q.push(node);
-		q = find(q, name, node->left);
-		q = find(q, name, node->right);
+		q = priv_search(q, name, node->left);
+		q = priv_search(q, name, node->right);
 	}
 	if(node->name != name)
 	{
-		q = find(q,name, node->left);
+		q = priv_search(q,name, node->left);
 	}
 	
 	if (node->name != name)
 	{
-		q = find(q,name, node->right);
+		q = priv_search(q,name, node->right);
 	}
 
 	return q;
@@ -237,6 +252,7 @@ int Binary_tree::getheight(Binary_tree::Node* node)
 	return count;
 }
 
+//for debugging only. delete when submitting
 void Binary_tree::traverse(Node* n)
 {
 	if (n == nullptr)
@@ -333,10 +349,19 @@ Binary_tree::Node* Binary_tree::rotate_right(Node* root)
 	return N;
 }
 
-void Binary_tree::remove_node(unsigned int const& id)
+void Binary_tree::remove(unsigned int const& id)
 {
-	this->tree_root = remove(this->tree_root, id);
-	this->node_count = this->node_count - 1;
+	this->tree_root = priv_remove(this->tree_root, id);
+	if (priv_search(id,this->tree_root) != nullptr)
+	{
+		std::cout << "unsuccessful" << std::endl;
+	}
+	else
+	{
+		std::cout << "successful" << std::endl;
+		this->node_count = this->node_count - 1;
+	}
+	//this->node_count = this->node_count - 1;
 }
 
 
@@ -356,7 +381,7 @@ void Binary_tree::remove_node(unsigned int const& id)
 * to find the leftmost node, we need to find the node that is the most right-heavy
 * this requires that our balances for each node be correct
 */
-Binary_tree::Node* Binary_tree::remove(Node* root, unsigned int const& id)
+Binary_tree::Node* Binary_tree::priv_remove(Node* root, unsigned int const& id)
 {
 	//pass in tree root
 	//return tree root but with node removed
@@ -370,6 +395,7 @@ Binary_tree::Node* Binary_tree::remove(Node* root, unsigned int const& id)
 		if (root->left == nullptr && root->right == nullptr)
 		{
 			root = nullptr;
+			delete root;
 		}
 		else if (root->left == nullptr && root->right != nullptr)
 		{
@@ -380,6 +406,7 @@ Binary_tree::Node* Binary_tree::remove(Node* root, unsigned int const& id)
 		{
 			//set node equal to left node
 			root = root->left;
+
 		}
 		else if (root->left != nullptr && root->right != nullptr)
 		{
@@ -391,56 +418,71 @@ Binary_tree::Node* Binary_tree::remove(Node* root, unsigned int const& id)
 			* delete M
 			* set roots value equal to temp
 			*/
-			std::queue<Binary_tree::Node*> q = get_inorder(root->right,q);
-			Binary_tree::Node* M = nullptr;
-			int temp = root->right->id;
-			//get the smallest value
-			while(!q.empty())
-			{
-				if (q.front()->id <= temp)
+				std::queue<Binary_tree::Node*> q = get_inorder(root->right, q); //this specific line is causing bad_alloc
+				//creating it is taking up too much memory
+				//but why does this happen only on test 4? thats the question
+				//its because test 4 is the only test that tests "remove"
+				Binary_tree::Node* M = nullptr;
+				int temp = root->right->id;
+				std::string tempn = root->right->name;
+				
+				//get the smallest value
+				while (!q.empty())
 				{
-					temp = q.front()->id;
-					M = q.front();
+					if (q.front()->id <= temp)
+					{
+						temp = q.front()->id;
+						M = q.front();
+					}
+					q.pop();
 				}
-				q.pop();
-			}
-			//get value of ios
-			/*
-			* its probably green squiggled, i think this is because it assumes q can be empty,
-			* which would give us a null pointer. But q can only be empty if the right subtree is empty
-			* and if the right subtree is empty, this function would not even be called
-			* therefore, you can ignore this squiggly.
-			*/
-			temp = M->id;
-			//delete the ios by passing in the right subtree
-			root->right=remove(root->right, temp);
-			//set the root
-			root->id = temp;
-			delete M;
-			
+				
+				//get value of ios
+				/*
+				* its probably green squiggled, i think this is because it assumes q can be empty,
+				* which would give us a null pointer. But q can only be empty if the right subtree is empty
+				* and if the right subtree is empty, this function would not even be called
+				* therefore, you can ignore this squiggly.
+				*/
+				temp = M->id;
+				tempn = M->name;
+				//delete the ios by passing in the right subtree
+				root->right = priv_remove(root->right, temp);
+				//set the root
+				root->id = temp;
+				root->name = tempn;
 		}
 	}
 	else if (root->id > id)
 	{
-		root->left = remove(root->left,id);
+		root->left = priv_remove(root->left,id);
 	}
 	else if (root->id < id)
 	{
-		root->right = remove( root->right,id);
+		root->right = priv_remove( root->right,id);
 	}
 	
 	return root;
 }
 
-void Binary_tree::main_insert(unsigned int const& id, std::string const& name)
+void Binary_tree::insert(unsigned int const& id, std::string const& name)
 {
-	this->tree_root = insert(this->tree_root, id, name);
+	this->tree_root = priv_insert(this->tree_root, id, name);
+	if (priv_search(id, this->tree_root) == nullptr)
+	{
+		std::cout << "unsuccessful" << std::endl;
+	}
+	else
+	{
+		std::cout << "successful" << std::endl;
+	}
 
 }
 
 void Binary_tree::print_preorder_helper()
 {
 	std::queue< Binary_tree::Node*> q;
+	//get_preorder(this->tree_root, q);
 	print_queue(get_preorder(this->tree_root,q));
 }
 
@@ -468,7 +510,7 @@ void Binary_tree::print_level_count()
 * go to right node rinse and repeat
 * return
 */
-std::queue< Binary_tree::Node*> Binary_tree::get_preorder(Binary_tree::Node* root , std::queue< Binary_tree::Node*> q)
+std::queue< Binary_tree::Node*> Binary_tree::get_preorder(Binary_tree::Node* root , std::queue< Binary_tree::Node*>& q)
 {
 	if (root == nullptr)
 	{
@@ -490,7 +532,7 @@ std::queue< Binary_tree::Node*> Binary_tree::get_preorder(Binary_tree::Node* roo
 * add the node to the queue
 * return
 */
-std::queue< Binary_tree::Node*> Binary_tree::get_postorder(Binary_tree::Node* root, std::queue< Binary_tree::Node*> q)
+std::queue< Binary_tree::Node*> Binary_tree::get_postorder(Binary_tree::Node* root, std::queue< Binary_tree::Node*>& q)
 {
 	if (root == nullptr)
 	{
@@ -513,7 +555,7 @@ std::queue< Binary_tree::Node*> Binary_tree::get_postorder(Binary_tree::Node* ro
 * go to the right node rinse and repeat
 * return
 */
-std::queue< Binary_tree::Node*> Binary_tree::get_inorder(Binary_tree::Node* root, std::queue< Binary_tree::Node*> q)
+std::queue< Binary_tree::Node*> Binary_tree::get_inorder(Binary_tree::Node* root, std::queue< Binary_tree::Node*>& q)
 {
 	if (root == nullptr)
 	{
@@ -530,11 +572,14 @@ std::queue< Binary_tree::Node*> Binary_tree::get_inorder(Binary_tree::Node* root
 
 void Binary_tree::print_queue(std::queue<Binary_tree::Node*> q)
 {
+	std::string queue;
 	while (!q.empty())
 	{
-		std::cout << q.front()->name << ", ";
+		queue = queue + q.front()->name + ", ";
 		q.pop();
 	}
+	queue = queue.substr(0, queue.size() - 2);
+	std::cout << queue << std::endl;
 }
 
 //getting the entire tree but inorder traversal
@@ -546,11 +591,16 @@ void Binary_tree::remove_N(int const& N)
 	{
 		q.pop();
 	}
-	this->tree_root = remove(this->tree_root,q.front()->id);
-	this->node_count = node_count - 1;
+	remove(q.front()->id);
+	while (!q.empty())
+	{
+		q.pop();
+	}
+	//this->node_count = node_count - 1;
 }
 
 //all we have to do for our destructor is get the queue of the inorder nodes and delete them sequentially
+
 Binary_tree::~Binary_tree()
 {
 	std::queue<Binary_tree::Node*> q = get_inorder(this->tree_root, q);
@@ -559,5 +609,17 @@ Binary_tree::~Binary_tree()
 		delete(q.front());
 		q.pop();
 	}
+}
+
+std::vector<int> Binary_tree::inorder()
+{
+	std::queue<Binary_tree::Node*> q = get_postorder(this->tree_root, q);
+	std::vector<int> v;
+	while (!q.empty())
+	{
+		v.push_back( q.front()->id);
+		q.pop();
+	}
+	return v;
 }
 

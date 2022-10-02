@@ -1,6 +1,6 @@
 #include <iostream>
 #include "binary_tree.h"
-#include "BST.h"
+//#include "BST.h"
 #include <string>
 #include <random>
 /* Note: 
@@ -8,84 +8,122 @@
 	2. You will submit this main.cpp file and any header files you have on Gradescope. 
 */
 
-std::string random_name();
+void command(Binary_tree&);
+//make a command function
+/*
+* call the function once the program starts
+* once a command is done, prompt for more input.
+*/
 //get a line to print out from the users input
 //make one for file streams too
+
+
+//bugs:
+/*
+* inputting "00001234" gives "1234"
+* output file for testing is blank
+*/
+
+
 int main()
 {
 	Binary_tree bst;
-	std::string result;
-	std::getline(std::cin,result);
-	std::cout << result << std::endl;
-	//insert remove find etc
-	//look into using string.compare instead of ==
-	//get substring of result
-	//result.substr();
-	//get the substring of result up until the first space character
-	int space = result.find(' ');
-	std::string command = result.substr(0, space);
-	std::string nameandid = result.substr(space+1, result.size());
-	space = nameandid.find(' ');
-	std::string name = nameandid.substr(0, space);
-	std::string id = nameandid.substr(space, nameandid.size());
-	//name = name.substr(1, name.size()-2); //remove the quotes
-	//i feel like they will try to test for this method of removal, lets
-	//search the string to see if there actually ARE any quotes in it just to be safe.
-	if (name.find('"') != std::string::npos)
-	{
-		int quote = name.find('"');
-		name = name.substr(quote + 1, name.size());
-		quote = name.find('"');
-		name = name.substr(0, quote);
-	}
-	if (command == "insert")
-	{
-		//check for appropriate parameters
-		//insert nameid: name and then id seperated by space
-		std::cout << " 'insert' entered!" << std::endl;
-		std::cout << "name: " << name << std::endl;
-		std::cout << "id:" << id << std::endl;
-		bst.main_insert(std::stoi(id),name);
-	}
-	/*
-	* //use getline
-	* use substring to see what command they wanna do, look at the data on the same line
-	* based on commandand data, perform the command.
-	* example: insert gatorid name
-	* if "insert
-	* call insert(gatorid, name)
-	*
-	 */
-	
-	//use helper functions to help get the root
-	for (int i = 0; i < 10; i++)
-	{
-		//std::cout << (i + rand()) / 100 << std::endl;
-		bst.main_insert((i), random_name());
-	}
-
-	bst.traverse_whole_tree();
-	bst.print_inorder_helper();
-	bst.remove_N(3);
-	bst.traverse_whole_tree();
-	bst.print_level_count();
-	
+	command(bst);
 	return 0;
 }
-//for testing only, delete when submitting project
-std::string random_name()
-{
-	std::vector<char> alphabet = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
-	std::string name = "";
-	for (int i = 0; i < 5; i++)
-	{
-		name = name + alphabet.at(rand() %(alphabet.size()-1));
-	}
-	name = name + " ";
-	for (int i = 0; i < 5; i++)
-	{
-		name = name + alphabet.at(rand() % (alphabet.size()-1));
-	}
-	return name;
-}
 
+//look into using string.compare instead of ==
+
+void command(Binary_tree& bst)
+{
+	std::string result;
+	bool run = true;
+	int numofcom = 0;
+	std::cin >> numofcom;
+	std::cin.ignore();
+		while (numofcom > 0)
+		{
+				std::getline(std::cin, result);
+				int space = result.find(' ');
+				std::string command = result.substr(0, space);
+				if (command == "insert")
+				{
+					//get the name and id by substr the character after the space up until
+					//the end of the line
+					std::string nameandid = result.substr(space + 1, result.size());
+					space = nameandid.find(' ');
+					//get the name by substr up until the first space
+					std::string name = nameandid.substr(0, space);
+					//get the id by substr the rest of the line
+					std::string id = nameandid.substr(space, nameandid.size());
+					//remove quotes
+					if (name.find('"') != std::string::npos)
+					{
+						int quote = name.find('"');
+						name = name.substr(quote + 1, name.size());
+						quote = name.find('"');
+						name = name.substr(0, quote);
+					}
+					bst.insert(std::stoi(id), name);
+
+				}
+				//remove id
+				else if (command == "remove")
+				{
+					int id = stoi(result.substr(space + 1, result.size()));
+					bst.remove(id);
+				}
+				else if (command == "search")
+				{
+					//check if number or name
+					//get the id by substr the rest of the line
+					std::string name = result.substr(space + 1, result.size());
+					if (name.find('"') != std::string::npos)
+					{
+						int quote = name.find('"');
+						name = name.substr(quote + 1, name.size());
+						quote = name.find('"');
+						name = name.substr(0, quote);
+					}
+					if (isdigit(name[0]))
+					{
+						bst.search(stoi(name));
+					}
+					else
+					{
+						bst.search(name);
+					}
+				}
+				else if (command == "printInorder")
+				{
+					bst.print_inorder_helper();
+				}
+				else if (command == "printPreorder")
+				{
+					bst.print_preorder_helper();
+				}
+				else if (command == "printPostorder")
+				{
+					bst.print_postorder_helper();
+				}
+				else if (command == "printLevelCount")
+				{
+					bst.print_level_count();
+				}
+				else if (command == "removeInorder")
+				{
+					int N = stoi(result.substr(space + 1, result.size()));
+					bst.remove_N(N);
+				}
+				else if (command == "traverse")
+				{
+					bst.traverse_whole_tree();
+				}
+				else
+				{
+					std::cout << "unsuccessful";
+				}
+				numofcom--;
+			}
+	
+}
