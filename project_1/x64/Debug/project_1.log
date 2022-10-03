@@ -1,9 +1,16 @@
 ﻿  main.cpp
-C:\Users\steve\source\cop3530\project_1\src\binary_tree.h(430,24): warning C4018: '<=': signed/unsigned mismatch
-C:\Users\steve\source\cop3530\project_1\src\main.cpp(47,33): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\steve\source\cop3530\project_1\src\main.cpp(54,33): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\steve\source\cop3530\project_1\src\main.cpp(62,33): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\steve\source\cop3530\project_1\src\main.cpp(64,29): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\steve\source\cop3530\project_1\src\main.cpp(83,33): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\steve\source\cop3530\project_1\src\main.cpp(85,29): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-  project_1.vcxproj -> C:\Users\steve\source\cop3530\project_1\x64\Debug\project_1.exe
+C:\Users\steve\source\repos\COP3530\project 1\src\binary_tree.h(106,14): warning C4018: '>': signed/unsigned mismatch
+C:\Users\steve\source\repos\COP3530\project 1\src\binary_tree.h(111,14): warning C4018: '<': signed/unsigned mismatch
+C:\Users\steve\source\repos\COP3530\project 1\src\binary_tree.h(143,20): warning C4018: '>': signed/unsigned mismatch
+C:\Users\steve\source\repos\COP3530\project 1\src\binary_tree.h(147,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\steve\source\repos\COP3530\project 1\src\binary_tree.h(167,17): warning C4018: '>': signed/unsigned mismatch
+C:\Users\steve\source\repos\COP3530\project 1\src\binary_tree.h(171,17): warning C4018: '<': signed/unsigned mismatch
+C:\Users\steve\source\repos\COP3530\project 1\src\binary_tree.h(451,20): warning C4018: '>': signed/unsigned mismatch
+C:\Users\steve\source\repos\COP3530\project 1\src\binary_tree.h(455,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\steve\source\repos\COP3530\project 1\src\main.cpp(47,33): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\steve\source\repos\COP3530\project 1\src\main.cpp(54,33): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\steve\source\repos\COP3530\project 1\src\main.cpp(62,33): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\steve\source\repos\COP3530\project 1\src\main.cpp(64,29): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\steve\source\repos\COP3530\project 1\src\main.cpp(83,33): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\steve\source\repos\COP3530\project 1\src\main.cpp(85,29): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+  project_1.vcxproj -> C:\Users\steve\source\repos\COP3530\project 1\x64\Debug\project_1.exe

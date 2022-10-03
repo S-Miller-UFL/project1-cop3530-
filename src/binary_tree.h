@@ -3,13 +3,14 @@
 //got help from eric chen on 9/23/2022
 //got help from liv on 9/26/2022
 //got help from blake shaffer on 9/27/2022
+//got help from richie on 10/3/2022
 
 class Binary_tree
 {
 public:
 	struct Node
 	{
-		unsigned int id;
+		int id;
 		std::string name;
 		int balance_factor;
 		Node* left;
@@ -64,6 +65,7 @@ private:
 	std::queue< Binary_tree::Node*> get_preorder(Binary_tree::Node*, std::queue< Binary_tree::Node*>&);
 	std::queue< Binary_tree::Node*> get_postorder(Binary_tree::Node*, std::queue< Binary_tree::Node*>&);
 	std::queue< Binary_tree::Node*> get_inorder(Binary_tree::Node*, std::queue< Binary_tree::Node*>&);
+	Node* get_ios(Node* root, int&);
 	//traversers
 	void traverse(Node*);
 	//mutators
@@ -341,7 +343,7 @@ Binary_tree::Node* Binary_tree::rotate_left(Node* root)
 Binary_tree::Node* Binary_tree::rotate_right(Node* root)
 {
 	Binary_tree::Node* N = nullptr;
-	Binary_tree::Node* node = new Binary_tree::Node;
+	Binary_tree::Node* node = nullptr;
 	node = root->left->right;
 	N = root->left;
 	root->left = node;
@@ -418,39 +420,33 @@ Binary_tree::Node* Binary_tree::priv_remove(Node* root, unsigned int const& id)
 			* delete M
 			* set roots value equal to temp
 			*/
-				std::queue<Binary_tree::Node*> q = get_inorder(root->right, q); //this specific line is causing bad_alloc
-				//creating it is taking up too much memory
-				//but why does this happen only on test 4? thats the question
-				//its because test 4 is the only test that tests "remove"
-				Binary_tree::Node* M = nullptr;
-				int temp = root->right->id;
-				std::string tempn = root->right->name;
-				
-				//get the smallest value
-				while (!q.empty())
+			std::queue<Binary_tree::Node*> q; // = get_inorder(root->right, q); this specific line is causing bad_alloc
+			//fixed on 10/3/2022: the reason it was throwing bad alloc is because you were declaring q while also passing it into get_inorder.
+			//you dont need to do that, as q gets passed in by reference.
+			get_inorder(root->right, q);
+
+			Binary_tree::Node* M = root; //get_ios(root->right, root->right->id);
+			int temp = root->right->id;
+			std::string tempn = root->right->name;
+			//get the smallest value
+			while (!q.empty())
+			{
+				if (q.front()->id <= temp)
 				{
-					if (q.front()->id <= temp)
-					{
-						temp = q.front()->id;
-						M = q.front();
-					}
-					q.pop();
+					temp = q.front()->id;
+					M = q.front();
 				}
-				
-				//get value of ios
-				/*
-				* its probably green squiggled, i think this is because it assumes q can be empty,
-				* which would give us a null pointer. But q can only be empty if the right subtree is empty
-				* and if the right subtree is empty, this function would not even be called
-				* therefore, you can ignore this squiggly.
-				*/
-				temp = M->id;
-				tempn = M->name;
-				//delete the ios by passing in the right subtree
-				root->right = priv_remove(root->right, temp);
-				//set the root
-				root->id = temp;
-				root->name = tempn;
+				q.pop();
+			}
+			
+			//get value of ios
+			temp = M->id; //fix this
+			tempn = M->name;
+			//delete the ios by passing in the right subtree
+			root->right = priv_remove(root->right, temp);
+			//set the root
+			root->id = temp;
+			root->name = tempn;
 		}
 	}
 	else if (root->id > id)
@@ -570,6 +566,26 @@ std::queue< Binary_tree::Node*> Binary_tree::get_inorder(Binary_tree::Node* root
 	return q;
 }
 
+Binary_tree::Node* Binary_tree::get_ios(Node* root, int& ios)
+{
+	Node* n = nullptr;
+	Node* m = nullptr;
+	if (root == nullptr)
+	{
+		return root;
+	}
+	if (ios > root->id)
+	{
+		ios = root->id;
+		if (root->left != nullptr)
+		{
+			root = get_ios(root->left, ios);
+		}
+	}
+	return root;
+}
+
+
 void Binary_tree::print_queue(std::queue<Binary_tree::Node*> q)
 {
 	std::string queue;
@@ -586,7 +602,8 @@ void Binary_tree::print_queue(std::queue<Binary_tree::Node*> q)
 //removing nth item from that inorder traversal
 void Binary_tree::remove_N(int const& N)
 {
-	std::queue<Binary_tree::Node*> q = get_inorder(this->tree_root,q);
+	std::queue<Binary_tree::Node*> q;
+	get_inorder(this->tree_root, q);
 	for (int i = 0; i < N; i++)
 	{
 		q.pop();
@@ -600,10 +617,10 @@ void Binary_tree::remove_N(int const& N)
 }
 
 //all we have to do for our destructor is get the queue of the inorder nodes and delete them sequentially
-
 Binary_tree::~Binary_tree()
 {
-	std::queue<Binary_tree::Node*> q = get_inorder(this->tree_root, q);
+	std::queue<Binary_tree::Node*> q;
+	get_inorder(this->tree_root, q);
 	while (!q.empty())
 	{
 		delete(q.front());
@@ -613,7 +630,8 @@ Binary_tree::~Binary_tree()
 
 std::vector<int> Binary_tree::inorder()
 {
-	std::queue<Binary_tree::Node*> q = get_postorder(this->tree_root, q);
+	std::queue<Binary_tree::Node*> q;
+	get_postorder(this->tree_root, q);
 	std::vector<int> v;
 	while (!q.empty())
 	{
