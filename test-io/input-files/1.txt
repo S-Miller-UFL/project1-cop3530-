@@ -1,6 +1,3 @@
-5
-search 12345678
-search "Adam"
-insert "Adam" 12345678
-search 23456789
-search 12345678
+version https://git-lfs.github.com/spec/v1
+oid sha256:175a63f38e60ea41c03740a09f64bef8eec3fb126dfe36a0e141785bed7b6b59
+size 136

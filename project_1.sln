@@ -1,31 +1,3 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.1.32421.90
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "project_1", "project_1\project_1.vcxproj", "{361A152E-AF5D-47CD-B215-4CF9CF5FC3E9}"
-EndProject
-Global
-	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|x64 = Debug|x64
-		Debug|x86 = Debug|x86
-		Release|x64 = Release|x64
-		Release|x86 = Release|x86
-	EndGlobalSection
-	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{361A152E-AF5D-47CD-B215-4CF9CF5FC3E9}.Debug|x64.ActiveCfg = Debug|x64
-		{361A152E-AF5D-47CD-B215-4CF9CF5FC3E9}.Debug|x64.Build.0 = Debug|x64
-		{361A152E-AF5D-47CD-B215-4CF9CF5FC3E9}.Debug|x86.ActiveCfg = Debug|Win32
-		{361A152E-AF5D-47CD-B215-4CF9CF5FC3E9}.Debug|x86.Build.0 = Debug|Win32
-		{361A152E-AF5D-47CD-B215-4CF9CF5FC3E9}.Release|x64.ActiveCfg = Release|x64
-		{361A152E-AF5D-47CD-B215-4CF9CF5FC3E9}.Release|x64.Build.0 = Release|x64
-		{361A152E-AF5D-47CD-B215-4CF9CF5FC3E9}.Release|x86.ActiveCfg = Release|Win32
-		{361A152E-AF5D-47CD-B215-4CF9CF5FC3E9}.Release|x86.Build.0 = Release|Win32
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {97535D90-BB74-4C9C-ACEE-3B1D603B0912}
-	EndGlobalSection
-EndGlobal
+version https://git-lfs.github.com/spec/v1
+oid sha256:9e132af78b26a6c81b1f4f236dd5575525980f4d91dbe3906dcd4feb4c5847a2
+size 1447
